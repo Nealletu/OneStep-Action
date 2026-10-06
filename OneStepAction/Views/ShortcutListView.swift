@@ -49,6 +49,23 @@ struct ShortcutListView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
+                        model.importShortcuts()
+                    } label: {
+                        Label(String(localized: "common.import"), systemImage: "square.and.arrow.down")
+                    }
+                    .help(String(localized: "help.import"))
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        model.exportShortcuts()
+                    } label: {
+                        Label(String(localized: "common.export"), systemImage: "square.and.arrow.up")
+                    }
+                    .help(String(localized: "help.export"))
+                    .disabled(model.store.bindings.isEmpty)
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
                         isPresentingAdd = true
                     } label: {
                         Label(String(localized: "common.add"), systemImage: "plus")

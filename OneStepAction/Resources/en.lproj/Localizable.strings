@@ -35,6 +35,8 @@
 "error.shell" = "Shell command failed (exit %d)";
 "error.shellDetail" = "Shell command failed (exit %d):\n%@";
 "error.eventTap.create" = "Failed to create global event tap. Check Accessibility permission.";
+"error.export" = "Export failed: %@";
+"error.import.invalid" = "Could not parse the file: %@";
 
 "alert.actionFailed.title" = "Action Failed";
 "alert.error" = "Error";
@@ -45,6 +47,8 @@
 "common.delete" = "Delete";
 "common.add" = "Add";
 "common.browse" = "Browse…";
+"common.export" = "Export";
+"common.import" = "Import";
 
 "window.shortcuts" = "Shortcuts";
 "menu.empty" = "No shortcuts yet";
@@ -57,6 +61,11 @@
 "empty.title" = "No Shortcuts";
 "empty.description" = "Add a global shortcut to lock the screen, open an app, open a URL, or run a shell command.";
 "help.addShortcut" = "Add Shortcut";
+"help.export" = "Export Shortcuts";
+"help.import" = "Import Shortcuts";
+
+"import.empty" = "The file contains no shortcuts";
+"import.result" = "Imported %1$d, skipped %2$d duplicate(s), %3$d conflict(s)";
 
 "add.title" = "Add Shortcut";
 "edit.title" = "Edit Shortcut";

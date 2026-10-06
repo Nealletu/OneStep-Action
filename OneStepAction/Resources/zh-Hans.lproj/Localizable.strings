@@ -35,6 +35,8 @@
 "error.shell" = "Shell 命令失败（退出码 %d）";
 "error.shellDetail" = "Shell 命令失败（退出码 %d）：\n%@";
 "error.eventTap.create" = "无法创建全局事件监听。请检查辅助功能权限。";
+"error.export" = "导出失败：%@";
+"error.import.invalid" = "无法解析该文件：%@";
 
 "alert.actionFailed.title" = "操作执行失败";
 "alert.error" = "错误";
@@ -45,6 +47,8 @@
 "common.delete" = "删除";
 "common.add" = "添加";
 "common.browse" = "浏览…";
+"common.export" = "导出";
+"common.import" = "导入";
 
 "window.shortcuts" = "快捷键";
 "menu.empty" = "还没有快捷键";
@@ -57,6 +61,11 @@
 "empty.title" = "还没有快捷键";
 "empty.description" = "添加全局快捷键，用于锁定屏幕、打开 App、打开 URL 或执行 Shell 命令。";
 "help.addShortcut" = "添加快捷键";
+"help.export" = "导出快捷键配置";
+"help.import" = "导入快捷键配置";
+
+"import.empty" = "文件中没有快捷键";
+"import.result" = "已导入 %1$d 条，跳过重复 %2$d 条、冲突 %3$d 条";
 
 "add.title" = "添加快捷键";
 "edit.title" = "编辑快捷键";

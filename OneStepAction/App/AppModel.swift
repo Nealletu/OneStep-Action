@@ -1,5 +1,7 @@
+import AppKit
 import Carbon.HIToolbox
 import Foundation
+import UniformTypeIdentifiers
 
 /// App-level state wired to services.
 @MainActor
@@ -80,4 +82,68 @@ final class AppModel {
     func clearActionError() {
         lastActionError = nil
     }
+
+    // MARK: - Import / Export
+
+    func exportShortcuts() {
+        guard !store.bindings.isEmpty else { return }
+
+        do {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+            let data = try encoder.encode(store.bindings)
+
+            let panel = NSSavePanel()
+            panel.title = String(localized: "help.export")
+            panel.prompt = String(localized: "common.export")
+            panel.allowedContentTypes = [.json]
+            panel.canCreateDirectories = true
+            panel.isExtensionHidden = false
+            panel.directoryURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first
+            panel.nameFieldStringValue = "onestep-shortcuts-\(Self.exportDateFormatter.string(from: Date())).json"
+
+            guard panel.runModal() == .OK, let url = panel.url else { return }
+            try data.write(to: url, options: .atomic)
+        } catch {
+            lastActionError = String(format: String(localized: "error.export"), error.localizedDescription)
+        }
+    }
+
+    func importShortcuts() {
+        let panel = NSOpenPanel()
+        panel.title = String(localized: "help.import")
+        panel.allowedContentTypes = [.json]
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+
+        do {
+            let data = try Data(contentsOf: url)
+            let incoming = try JSONDecoder().decode([ShortcutBinding].self, from: data)
+            guard !incoming.isEmpty else {
+                lastActionError = String(localized: "import.empty")
+                return
+            }
+            let stats = store.merge(incoming)
+            syncShortcuts()
+            if stats.duplicates + stats.conflicts > 0 {
+                lastActionError = String(
+                    format: String(localized: "import.result"),
+                    stats.imported,
+                    stats.duplicates,
+                    stats.conflicts
+                )
+            }
+        } catch {
+            lastActionError = String(format: String(localized: "error.import.invalid"), error.localizedDescription)
+        }
+    }
+
+    private static let exportDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
 }

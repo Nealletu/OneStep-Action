@@ -16,6 +16,7 @@ Native macOS menu bar global hotkey tool.
 - Actions: Lock Screen, Launch Application, Open URL, Shell Command
 - Shortcut recorder (⌘ ⌥ ⇧ ⌃ + keys)
 - Enable / disable, add / edit / delete
+- Import / export shortcut config as JSON (import merges, skips duplicates/conflicts)
 - Conflict detection with honest limits (never claims 100% third-party coverage)
 - Accessibility permission flow
 - Launch at Login via `SMAppService`
