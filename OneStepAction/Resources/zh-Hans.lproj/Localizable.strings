@@ -1,5 +1,10 @@
 /* Simplified Chinese */
 "action.lockScreen" = "锁定屏幕";
+"action.systemEvent" = "系统事件";
+"action.displaySleep" = "关闭显示器";
+"action.systemSleep" = "系统睡眠";
+"action.chain" = "聚合";
+"action.chainName" = "%d 条快捷键";
 "action.launchApp" = "打开 %@";
 "action.openURL" = "打开 %@";
 "action.shell" = "Shell：%@";
@@ -7,6 +12,8 @@
 "type.app" = "应用";
 "type.url" = "URL";
 "type.shell" = "Shell 命令";
+"type.chain" = "聚合";
+"chain.orderHint" = "按勾选顺序执行。";
 
 "conflict.unknown" = "无法确认是否被其他程序占用";
 "conflict.clear" = "当前未发现已知冲突";
@@ -35,6 +42,8 @@
 "error.shell" = "Shell 命令失败（退出码 %d）";
 "error.shellDetail" = "Shell 命令失败（退出码 %d）：\n%@";
 "error.eventTap.create" = "无法创建全局事件监听。请检查辅助功能权限。";
+"error.chainFailed" = "聚合中部分快捷键执行失败：\n%@";
+"error.chainEmpty" = "聚合中没有可执行的快捷键。";
 "error.export" = "导出失败：%@";
 "error.import.invalid" = "无法解析该文件：%@";
 
@@ -67,18 +76,39 @@
 "import.empty" = "文件中没有快捷键";
 "import.result" = "已导入 %1$d 条，跳过重复 %2$d 条、冲突 %3$d 条";
 
+"schedule.segment" = "定时";
+"schedule.rule" = "重复";
+"schedule.once" = "一次性";
+"schedule.daily" = "每天";
+"schedule.weekly" = "每%1$@";
+"schedule.weeklyLabel" = "每周";
+"schedule.dateTime" = "日期与时间";
+"schedule.time" = "时间";
+"schedule.weekday" = "星期几";
+"schedule.pickShortcuts" = "要执行的快捷键";
+"schedule.noBindings" = "还没有快捷键，请先添加。";
+"schedule.bindingCount" = "%d 条快捷键";
+"schedule.addTitle" = "添加定时任务";
+"schedule.editTitle" = "编辑定时任务";
+"schedule.empty.title" = "还没有定时任务";
+"schedule.empty.description" = "将已有快捷键设为一次性、每天或每周定时执行。";
+"help.addSchedule" = "添加定时任务";
+
 "add.title" = "添加快捷键";
 "edit.title" = "编辑快捷键";
 "field.action" = "动作";
 "field.shortcut" = "快捷键";
 "field.enabled" = "启用";
 "field.customName" = "名称（可选）";
+"field.event" = "事件";
+"field.includeDisabled" = "包含已禁用的快捷键";
 "field.appPath" = "应用路径";
 "field.appName" = "应用名称";
 "field.bundleID" = "Bundle ID";
 "field.url" = "URL";
 "hint.lockScreen" = "使用系统登录会话锁屏接口（非模拟 ⌃⌘Q）。";
 "hint.shell" = "以登录 Shell 执行。命令仅保存在本地，按下快捷键时才会运行。";
+"hint.sleepEvents" = "关闭显示器或使系统睡眠，按任意键或电源键唤醒。";
 
 "recorder.listening" = "请按下快捷键…（Esc 取消）";
 "recorder.placeholder" = "点击后按下快捷键";
@@ -86,6 +116,8 @@
 
 "confirm.deleteTitle" = "删除快捷键？";
 "confirm.deleteMessage" = "将同时解除该快捷键的全局注册。";
+"confirm.deleteScheduleTitle" = "删除定时任务？";
+"confirm.deleteScheduleMessage" = "将停止该定时执行。";
 
 "permission.title" = "需要辅助功能权限";
 "permission.message" = "为了监听全局快捷键，请允许 OneStep Action 访问“辅助功能”。";

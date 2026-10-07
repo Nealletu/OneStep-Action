@@ -1,6 +1,41 @@
-## OneStep Action 1.0.2
+## OneStep Action 1.0.3
 
 原生 macOS 菜单栏全局快捷键工具。
+
+### 相对 1.0.2
+- 新增：定时任务——将已有快捷键设为一次性、每天或每周定时执行（可绑定多条，按顺序执行）
+- 新增：系统事件动作——锁定屏幕 / 关闭显示器 / 系统睡眠，二级菜单选择
+- 新增：聚合快捷键——单个按键按顺序触发多条已有快捷键，可选是否包含已禁用的快捷键
+- 主面板改为 macOS 26 原生侧边栏导航（左侧菜单，顶部按钮展开/收起），错过触发（睡眠/未运行）直接跳过
+- 定时任务同样支持"包含已禁用快捷键"开关，并修复窗口期内重复触发、到期任务漏触发等问题
+- 默认窗口宽度加大（760×520，最小 640）
+
+### 功能
+- 系统事件：锁定屏幕 / 关闭显示器 / 系统睡眠
+- 打开 App
+- 打开 URL
+- 执行 Shell 命令
+- 聚合：单键顺序触发多条已有快捷键
+- 导出 / 导入快捷键配置（JSON）
+- 定时执行已有快捷键（一次性 / 每天 / 每周）
+
+### 系统要求
+- Apple Silicon（arm64）
+- macOS 26.0+
+- 首次使用需授予「辅助功能」权限
+
+### 安装
+1. 下载 `OneStep-Action-1.0.3.dmg`
+2. 打开 dmg，将 **OneStep Action** 拖入「应用程序」
+3. 首次打开：系统设置 → 隐私与安全性 → 辅助功能 → 勾选 OneStep Action
+
+### 校验
+```bash
+lipo -info "/Applications/OneStep Action.app/Contents/MacOS/OneStep Action"
+# Non-fat file: ... is architecture: arm64
+```
+
+## OneStep Action 1.0.2
 
 ### 相对 1.0.1
 - 新增：导出快捷键配置（保存面板，默认桌面，文件名含日期）
@@ -13,18 +48,16 @@
 - 执行 Shell 命令
 - 导出 / 导入快捷键配置（JSON）
 
-### 系统要求
-- Apple Silicon（arm64）
-- macOS 26.0+
-- 首次使用需授予「辅助功能」权限
+## OneStep Action 1.0.1
 
-### 安装
-1. 下载 `OneStep-Action-1.0.2.dmg`
-2. 打开 dmg，将 **OneStep Action** 拖入「应用程序」
-3. 首次打开：系统设置 → 隐私与安全性 → 辅助功能 → 勾选 OneStep Action
+### 相对 1.0.0
+- 启动即生效：无需先打开设置窗口
+- 授予辅助功能后自动注册快捷键
+- 菜单栏文案与对齐优化
+- About 链接指向 OneStep-Action 仓库
 
-### 校验
-```bash
-lipo -info "/Applications/OneStep Action.app/Contents/MacOS/OneStep Action"
-# Non-fat file: ... is architecture: arm64
-```
+### 功能
+- 锁定屏幕
+- 打开 App
+- 打开 URL
+- 执行 Shell 命令

@@ -8,6 +8,8 @@ enum ActionExecutorError: LocalizedError {
     case appNotFound(String)
     case lockScreenUnavailable(String)
     case shellFailed(exitCode: Int32, stderr: String)
+    case chainFailed(String)
+    case chainEmpty
 
     var errorDescription: String? {
         switch self {
@@ -23,22 +25,86 @@ enum ActionExecutorError: LocalizedError {
                 return String(format: String(localized: "error.shell"), code)
             }
             return String(format: String(localized: "error.shellDetail"), code, trimmed)
+        case let .chainFailed(detail):
+            return String(format: String(localized: "error.chainFailed"), detail)
+        case .chainEmpty:
+            return String(localized: "error.chainEmpty")
         }
     }
 }
 
 enum ActionExecutor {
+    /// - Parameter bindings: Full binding list; required to resolve `.chain` entries.
     @MainActor
-    static func execute(_ action: ShortcutAction) async throws {
+    static func execute(_ action: ShortcutAction, bindings: [ShortcutBinding] = []) async throws {
         switch action {
-        case .lockScreen:
-            try lockScreen()
+        case let .systemEvent(event):
+            try await executeSystemEvent(event)
         case let .launchApplication(bundleID, appName, appPath):
-            try launchApplication(bundleID: bundleID, appName: appName, appPath: appPath)
+            try await launchApplication(bundleID: bundleID, appName: appName, appPath: appPath)
         case let .openURL(raw):
             try openURL(raw)
         case let .shellCommand(command):
             try await runShell(command)
+        case let .chain(bindingIDs, includeDisabled):
+            try await executeChain(bindingIDs, includeDisabled: includeDisabled, bindings: bindings)
+        }
+    }
+
+    // MARK: - System Events
+
+    @MainActor
+    private static func executeSystemEvent(_ event: SystemEvent) async throws {
+        switch event {
+        case .lockScreen:
+            try lockScreen()
+        case .displaySleep:
+            // Verified via man pmset: immediate display sleep, no sudo required.
+            try await runShell("/usr/bin/pmset displaysleepnow")
+        case .systemSleep:
+            try await runShell("/usr/bin/pmset sleepnow")
+        }
+    }
+
+    // MARK: - Chain (aggregate)
+
+    @MainActor
+    private static func executeChain(
+        _ ids: [UUID],
+        includeDisabled: Bool,
+        bindings: [ShortcutBinding]
+    ) async throws {
+        var failures: [String] = []
+        var executed = 0
+        for id in ids {
+            guard let binding = bindings.first(where: { $0.id == id }) else {
+                NSLog("OneStep: chain entry missing, skipped: \(id)")
+                continue
+            }
+            if case .chain = binding.action {
+                // Nested chains are excluded at save time; skip defensively.
+                NSLog("OneStep: nested chain skipped: \(id)")
+                continue
+            }
+            if !includeDisabled, !binding.isEnabled {
+                NSLog("OneStep: chain entry disabled, skipped: \(id)")
+                continue
+            }
+            executed += 1
+            do {
+                try await execute(binding.action, bindings: bindings)
+            } catch {
+                NSLog("OneStep: chain entry failed \(id): \(error.localizedDescription)")
+                failures.append("\(binding.displayName): \(error.localizedDescription)")
+            }
+        }
+        // Every referenced entry vanished (or was filtered) — surface it instead of
+        // letting the key press look like a no-op.
+        guard executed > 0 else {
+            throw ActionExecutorError.chainEmpty
+        }
+        if !failures.isEmpty {
+            throw ActionExecutorError.chainFailed(failures.joined(separator: "\n"))
         }
     }
 
@@ -72,26 +138,15 @@ enum ActionExecutor {
     // MARK: - Launch App
 
     @MainActor
-    private static func launchApplication(bundleID: String?, appName: String, appPath: String?) throws {
+    private static func launchApplication(bundleID: String?, appName: String, appPath: String?) async throws {
         if let appPath, !appPath.isEmpty {
-            let url = URL(fileURLWithPath: appPath)
-            let configuration = NSWorkspace.OpenConfiguration()
-            NSWorkspace.shared.openApplication(at: url, configuration: configuration) { _, error in
-                if let error {
-                    NSLog("OneStep: open app at path failed: \(error)")
-                }
-            }
+            try await openApplication(URL(fileURLWithPath: appPath), appName: appName)
             return
         }
 
         if let bundleID, !bundleID.isEmpty,
            let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) {
-            let configuration = NSWorkspace.OpenConfiguration()
-            NSWorkspace.shared.openApplication(at: url, configuration: configuration) { _, error in
-                if let error {
-                    NSLog("OneStep: open app by bundle id failed: \(error)")
-                }
-            }
+            try await openApplication(url, appName: appName)
             return
         }
 
@@ -102,16 +157,26 @@ enum ActionExecutor {
             "/System/Applications/\(appName).app",
         ]
         for path in candidatePaths where FileManager.default.fileExists(atPath: path) {
-            let url = URL(fileURLWithPath: path)
-            let configuration = NSWorkspace.OpenConfiguration()
-            NSWorkspace.shared.openApplication(at: url, configuration: configuration) { _, error in
-                if let error {
-                    NSLog("OneStep: open app by name failed: \(error)")
-                }
-            }
+            try await openApplication(URL(fileURLWithPath: path), appName: appName)
             return
         }
         throw ActionExecutorError.appNotFound(appName)
+    }
+
+    /// Waits until the workspace finishes opening the app so chains run in true order.
+    @MainActor
+    private static func openApplication(_ url: URL, appName: String) async throws {
+        let configuration = NSWorkspace.OpenConfiguration()
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            NSWorkspace.shared.openApplication(at: url, configuration: configuration) { _, error in
+                if error != nil {
+                    NSLog("OneStep: open app failed for \(url.path)")
+                    continuation.resume(throwing: ActionExecutorError.appNotFound(appName))
+                } else {
+                    continuation.resume()
+                }
+            }
+        }
     }
 
     // MARK: - Open URL
@@ -127,7 +192,9 @@ enum ActionExecutor {
         guard let url = URL(string: candidate), url.scheme != nil else {
             throw ActionExecutorError.invalidURL(raw)
         }
-        NSWorkspace.shared.open(url)
+        guard NSWorkspace.shared.open(url) else {
+            throw ActionExecutorError.invalidURL(raw)
+        }
     }
 
     // MARK: - Shell

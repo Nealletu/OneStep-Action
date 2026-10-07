@@ -17,6 +17,7 @@ Native macOS menu bar global hotkey tool.
 - Shortcut recorder (⌘ ⌥ ⇧ ⌃ + keys)
 - Enable / disable, add / edit / delete
 - Import / export shortcut config as JSON (import merges, skips duplicates/conflicts)
+- Schedule existing shortcuts to run once, daily, or weekly (missed fires are skipped)
 - Conflict detection with honest limits (never claims 100% third-party coverage)
 - Accessibility permission flow
 - Launch at Login via `SMAppService`

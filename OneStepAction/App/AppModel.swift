@@ -8,10 +8,12 @@ import UniformTypeIdentifiers
 @Observable
 final class AppModel {
     let store = ShortcutStore()
+    let scheduledTasks = ScheduledTaskStore()
     let accessibility = AccessibilityManager()
     let loginItem = LaunchAtLoginManager()
 
     private(set) var shortcutManager: GlobalShortcutManager!
+    private(set) var scheduleManager: ScheduleManager!
     private(set) var lastActionError: String?
 
     var showPermissionSheet = false
@@ -20,6 +22,7 @@ final class AppModel {
         shortcutManager = GlobalShortcutManager { [weak self] binding in
             self?.noteTriggered(binding)
         }
+        scheduleManager = ScheduleManager(taskStore: scheduledTasks, shortcutStore: store)
         // Start event tap at launch — not only after the settings window opens.
         Task { @MainActor [weak self] in
             self?.bootstrap()
@@ -27,6 +30,7 @@ final class AppModel {
     }
 
     func bootstrap() {
+        scheduleManager.start()
         accessibility.refresh()
         if !accessibility.isTrusted {
             showPermissionSheet = true
@@ -73,6 +77,27 @@ final class AppModel {
     func setEnabled(_ enabled: Bool, id: UUID) {
         store.setEnabled(enabled, id: id)
         syncShortcuts()
+    }
+
+    // MARK: - Scheduled tasks
+
+    func addOrUpdateSchedule(_ task: ScheduledTask) {
+        if scheduledTasks.task(forID: task.id) != nil {
+            scheduledTasks.update(task)
+        } else {
+            scheduledTasks.add(task)
+        }
+        scheduleManager.reschedule()
+    }
+
+    func deleteSchedule(id: UUID) {
+        scheduledTasks.delete(id: id)
+        scheduleManager.reschedule()
+    }
+
+    func setScheduleEnabled(_ enabled: Bool, id: UUID) {
+        scheduledTasks.setEnabled(enabled, id: id)
+        scheduleManager.reschedule()
     }
 
     private func noteTriggered(_ binding: ShortcutBinding) {

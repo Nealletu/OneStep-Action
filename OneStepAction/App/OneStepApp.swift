@@ -18,7 +18,7 @@ struct OneStepApp: App {
         Window(String(localized: "window.shortcuts"), id: "main") {
             ShortcutListView()
                 .environment(model)
-                .frame(minWidth: 400, minHeight: 320)
+                .frame(minWidth: 640, minHeight: 320)
                 .onAppear {
                     // Settings window open → appear in Dock and ⌘Tab.
                     appDelegate.enterRegularMode()
@@ -26,7 +26,7 @@ struct OneStepApp: App {
                     model.bootstrap()
                 }
         }
-        .windowResizability(.contentMinSize)
+        .defaultSize(width: 760, height: 520)
         .defaultPosition(.center)
     }
 }

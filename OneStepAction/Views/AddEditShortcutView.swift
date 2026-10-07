@@ -13,7 +13,10 @@ struct AddEditShortcutView: View {
 
     let mode: AddEditShortcutMode
 
-    @State private var actionKind: ActionKind = .lockScreen
+    @State private var actionKind: ActionKind = .systemEvent
+    @State private var systemEvent: SystemEvent = .lockScreen
+    @State private var chainIDs: [UUID] = []
+    @State private var chainIncludeDisabled = false
     @State private var customName = ""
     @State private var keyCode: UInt16?
     @State private var modifiers: UInt64 = 0
@@ -27,19 +30,21 @@ struct AddEditShortcutView: View {
     @State private var isRecording = false
 
     enum ActionKind: String, CaseIterable, Identifiable {
-        case lockScreen
+        case systemEvent
         case launchApplication
         case openURL
         case shellCommand
+        case chain
 
         var id: String { rawValue }
 
         var label: String {
             switch self {
-            case .lockScreen: return String(localized: "action.lockScreen")
+            case .systemEvent: return String(localized: "action.systemEvent")
             case .launchApplication: return String(localized: "type.app")
             case .openURL: return String(localized: "type.url")
             case .shellCommand: return String(localized: "type.shell")
+            case .chain: return String(localized: "action.chain")
             }
         }
     }
@@ -116,8 +121,12 @@ struct AddEditShortcutView: View {
             return false
         }
         switch actionKind {
-        case .lockScreen:
+        case .systemEvent:
             return true
+        case .chain:
+            return chainIDs.contains { id in
+                chainAvailableBindings.contains { $0.id == id }
+            }
         case .launchApplication:
             return !appPath.isEmpty || !appBundleID.isEmpty || !appName.isEmpty
         case .openURL:
@@ -127,13 +136,81 @@ struct AddEditShortcutView: View {
         }
     }
 
+    /// Bindings eligible for chaining: aggregates cannot nest other aggregates,
+    /// and the shortcut being edited must not select itself (it would replace its
+    /// own action with a chain that skips itself — a silent dead key).
+    private var chainAvailableBindings: [ShortcutBinding] {
+        let editingID: UUID? = {
+            if case let .edit(binding) = mode { return binding.id }
+            return nil
+        }()
+        return model.store.bindings.filter {
+            if case .chain = $0.action { return false }
+            return $0.id != editingID
+        }
+    }
+
+    private func toggleChainSelection(_ id: UUID) {
+        if let index = chainIDs.firstIndex(of: id) {
+            chainIDs.remove(at: index)
+        } else {
+            chainIDs.append(id)
+        }
+    }
+
     @ViewBuilder
     private var actionFields: some View {
         switch actionKind {
-        case .lockScreen:
-            Text(String(localized: "hint.lockScreen"))
+        case .systemEvent:
+            Picker(String(localized: "field.event"), selection: $systemEvent) {
+                // Second-level menu for the system-event kind (lock / display / sleep).
+                Text(String(localized: "action.lockScreen")).tag(SystemEvent.lockScreen)
+                Text(String(localized: "action.displaySleep")).tag(SystemEvent.displaySleep)
+                Text(String(localized: "action.systemSleep")).tag(SystemEvent.systemSleep)
+            }
+            Text(systemEvent == .lockScreen
+                ? String(localized: "hint.lockScreen")
+                : String(localized: "hint.sleepEvents"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
+        case .chain:
+            Section {
+                if chainAvailableBindings.isEmpty {
+                    Text(String(localized: "schedule.noBindings"))
+                        .foregroundStyle(.secondary)
+                }
+                ForEach(chainAvailableBindings) { binding in
+                    Button {
+                        toggleChainSelection(binding.id)
+                    } label: {
+                        HStack {
+                            Text(ShortcutFormatter.display(for: binding))
+                                .font(.body.monospaced())
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 6))
+                                .frame(width: 88, alignment: .center)
+
+                            Text(binding.displayName)
+
+                            Spacer()
+
+                            if chainIDs.contains(binding.id) {
+                                Image(systemName: "checkmark")
+                                    .fontWeight(.semibold)
+                            }
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                }
+            } header: {
+                Text(String(localized: "schedule.pickShortcuts"))
+            } footer: {
+                Text(String(localized: "chain.orderHint"))
+            }
+
+            Toggle(String(localized: "field.includeDisabled"), isOn: $chainIncludeDisabled)
         case .launchApplication:
             HStack {
                 TextField(String(localized: "field.appPath"), text: $appPath)
@@ -159,7 +236,8 @@ struct AddEditShortcutView: View {
     private func hydrate() {
         switch mode {
         case .add:
-            actionKind = .lockScreen
+            actionKind = .systemEvent
+            systemEvent = .lockScreen
             isEnabled = true
         case let .edit(binding):
             keyCode = binding.keyCode
@@ -167,8 +245,13 @@ struct AddEditShortcutView: View {
             isEnabled = binding.isEnabled
             customName = binding.name ?? ""
             switch binding.action {
-            case .lockScreen:
-                actionKind = .lockScreen
+            case let .systemEvent(event):
+                actionKind = .systemEvent
+                systemEvent = event
+            case let .chain(ids, includeDisabled):
+                actionKind = .chain
+                chainIDs = ids
+                chainIncludeDisabled = includeDisabled
             case let .launchApplication(bundleID, name, path):
                 actionKind = .launchApplication
                 appBundleID = bundleID ?? ""
@@ -224,8 +307,15 @@ struct AddEditShortcutView: View {
 
         let action: ShortcutAction
         switch actionKind {
-        case .lockScreen:
-            action = .lockScreen
+        case .systemEvent:
+            action = .systemEvent(systemEvent)
+        case .chain:
+            action = .chain(
+                bindingIDs: chainIDs.filter { id in
+                    chainAvailableBindings.contains { $0.id == id }
+                },
+                includeDisabled: chainIncludeDisabled
+            )
         case .launchApplication:
             action = .launchApplication(
                 bundleID: appBundleID.isEmpty ? nil : appBundleID,

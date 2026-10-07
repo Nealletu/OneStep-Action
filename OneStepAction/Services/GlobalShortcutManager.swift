@@ -23,6 +23,9 @@ final class GlobalShortcutManager {
     nonisolated(unsafe) private var registrations: [ActiveRegistration] = []
     nonisolated(unsafe) private var eventTap: CFMachPort?
     nonisolated(unsafe) private var runLoopSource: CFRunLoopSource?
+    /// Full binding list for resolving `.chain` actions. Same threading contract as
+    /// `registrations`: only mutated from MainActor, read from the tap callback.
+    nonisolated(unsafe) private var bindingsSnapshot: [ShortcutBinding] = []
 
     @MainActor private let onTriggered: @MainActor (ShortcutBinding) -> Void
 
@@ -47,11 +50,13 @@ final class GlobalShortcutManager {
         removeTap()
         isRunning = false
         registrations = []
+        bindingsSnapshot = []
     }
 
     /// Replace the full set of enabled bindings and (re)start the tap.
     @MainActor
     func apply(bindings: [ShortcutBinding]) {
+        bindingsSnapshot = bindings
         registrations = bindings
             .filter(\.isEnabled)
             .map {
@@ -152,9 +157,10 @@ final class GlobalShortcutManager {
         }
 
         let action = match.action
+        let bindings = bindingsSnapshot
 
         Task { @MainActor in
-            await GlobalShortcutManager.performTriggeredAction(action)
+            await GlobalShortcutManager.performTriggeredAction(action, bindings: bindings)
         }
 
         // Consume the event so it does not reach the frontmost app.
@@ -162,9 +168,9 @@ final class GlobalShortcutManager {
     }
 
     @MainActor
-    private static func performTriggeredAction(_ action: ShortcutAction) async {
+    private static func performTriggeredAction(_ action: ShortcutAction, bindings: [ShortcutBinding]) async {
         do {
-            try await ActionExecutor.execute(action)
+            try await ActionExecutor.execute(action, bindings: bindings)
         } catch {
             NSLog("OneStep: action failed: \(error.localizedDescription)")
             presentFailureAlert(error.localizedDescription)

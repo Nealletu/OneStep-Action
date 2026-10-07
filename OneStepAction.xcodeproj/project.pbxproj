@@ -19,26 +19,33 @@
 		4E052B9EF351BBC4962B878D /* ShortcutConflictDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954027AEC872CF835CF7EAEC /* ShortcutConflictDetector.swift */; };
 		5317FD91F78F5C56A819DB2E /* KeyCodeMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4E794072CE9A8CEEEEAD31 /* KeyCodeMapper.swift */; };
 		5D526138AA650C57343CE9FD /* ShortcutListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953DDCD7177F2E057C117375 /* ShortcutListView.swift */; };
+		67486EA5AB4DD01FE555746D /* ScheduledTaskRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C79DEE78BFE2D314BF832BB /* ScheduledTaskRowView.swift */; };
+		6AC18ACD0A317839CBDAFB09 /* ScheduleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D415F32271DFC063983E9443 /* ScheduleManager.swift */; };
 		876BCF50BD31F1640426A0F7 /* MenuBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EE58680D1D8CDBFC23A80 /* MenuBarContentView.swift */; };
+		8A3CF8AB75B84D6E92080637 /* ScheduledTaskStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AD252E06F9390BBF596DCB /* ScheduledTaskStore.swift */; };
 		8CFC3088E37C14F862860F48 /* PermissionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3458BE6031881A2194E973B /* PermissionViews.swift */; };
 		90A5C4B6C24D9F4CC6D7532D /* ShortcutFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE9761A0606A231243FD11 /* ShortcutFormatter.swift */; };
 		90B9B66ED8BA20FA2F021B5D /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B159B6E7330973A5F823E9D8 /* LaunchAtLoginManager.swift */; };
+		9110AD0B17676641E1CB4170 /* ScheduledTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F44584B451439F57D1EB7EA /* ScheduledTask.swift */; };
 		9D9769867F814FFE5F2CC913 /* ShortcutAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1120C458856F894041EC9458 /* ShortcutAction.swift */; };
 		C3C811D5BDC25BB029CFCEAF /* ActionExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE125AC57869F938888A3E91 /* ActionExecutor.swift */; };
 		CCFCA245249F7556E021B335 /* ShortcutRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64DD428D2C9F1FA5381BAD2D /* ShortcutRowView.swift */; };
 		D0273B6060C5E38B53FFE4C1 /* ShortcutBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9D6C4EF910A52BEF148696 /* ShortcutBinding.swift */; };
 		EC3C7B81BB55E1560BA1356D /* AddEditShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F99E1F1BB4D97ABA57C870 /* AddEditShortcutView.swift */; };
 		ECADE6DB00857C6EC0D384F0 /* ConflictStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1335295F70656A9A287D272E /* ConflictStatusView.swift */; };
+		F8626AA9D2248CD5E455C597 /* AddEditScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3EB838756C8DF5572AB04F /* AddEditScheduleView.swift */; };
 		F91B28D218577F3F727BF0D1 /* ShortcutStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA8BF18445E17B12CBF40DE /* ShortcutStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1120C458856F894041EC9458 /* ShortcutAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutAction.swift; sourceTree = "<group>"; };
+		12AD252E06F9390BBF596DCB /* ScheduledTaskStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledTaskStore.swift; sourceTree = "<group>"; };
 		1335295F70656A9A287D272E /* ConflictStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConflictStatusView.swift; sourceTree = "<group>"; };
 		3D9D6C4EF910A52BEF148696 /* ShortcutBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutBinding.swift; sourceTree = "<group>"; };
 		45F99E1F1BB4D97ABA57C870 /* AddEditShortcutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditShortcutView.swift; sourceTree = "<group>"; };
 		4A4E794072CE9A8CEEEEAD31 /* KeyCodeMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyCodeMapper.swift; sourceTree = "<group>"; };
 		4B291841B6B4FB34FC1D4DF1 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		4C79DEE78BFE2D314BF832BB /* ScheduledTaskRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledTaskRowView.swift; sourceTree = "<group>"; };
 		53BE9761A0606A231243FD11 /* ShortcutFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutFormatter.swift; sourceTree = "<group>"; };
 		57CBAC1A4AE9CFAAEE33D8BE /* GlobalShortcutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalShortcutManager.swift; sourceTree = "<group>"; };
 		5B2D3D9860468270244982AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,10 +56,13 @@
 		78E15C0713EBD89462F75019 /* ShortcutConflict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutConflict.swift; sourceTree = "<group>"; };
 		953DDCD7177F2E057C117375 /* ShortcutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutListView.swift; sourceTree = "<group>"; };
 		954027AEC872CF835CF7EAEC /* ShortcutConflictDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutConflictDetector.swift; sourceTree = "<group>"; };
+		9B3EB838756C8DF5572AB04F /* AddEditScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditScheduleView.swift; sourceTree = "<group>"; };
+		9F44584B451439F57D1EB7EA /* ScheduledTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledTask.swift; sourceTree = "<group>"; };
 		AB12E9906005583874FACC5F /* AboutPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPresenter.swift; sourceTree = "<group>"; };
 		AC4D7F297D4B671C659DAECE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		AF1BF0A4918D5316BB6D1A31 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B159B6E7330973A5F823E9D8 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
+		D415F32271DFC063983E9443 /* ScheduleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleManager.swift; sourceTree = "<group>"; };
 		DE125AC57869F938888A3E91 /* ActionExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionExecutor.swift; sourceTree = "<group>"; };
 		E3458BE6031881A2194E973B /* PermissionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionViews.swift; sourceTree = "<group>"; };
 		F9DF61E7551F51BF71976F2F /* OneStepApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneStepApp.swift; sourceTree = "<group>"; };
@@ -64,6 +74,7 @@
 		71BBE69F5184446BCE0E78A8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9F44584B451439F57D1EB7EA /* ScheduledTask.swift */,
 				1120C458856F894041EC9458 /* ShortcutAction.swift */,
 				3D9D6C4EF910A52BEF148696 /* ShortcutBinding.swift */,
 				78E15C0713EBD89462F75019 /* ShortcutConflict.swift */,
@@ -78,6 +89,8 @@
 				DE125AC57869F938888A3E91 /* ActionExecutor.swift */,
 				57CBAC1A4AE9CFAAEE33D8BE /* GlobalShortcutManager.swift */,
 				B159B6E7330973A5F823E9D8 /* LaunchAtLoginManager.swift */,
+				12AD252E06F9390BBF596DCB /* ScheduledTaskStore.swift */,
+				D415F32271DFC063983E9443 /* ScheduleManager.swift */,
 				954027AEC872CF835CF7EAEC /* ShortcutConflictDetector.swift */,
 				FFA8BF18445E17B12CBF40DE /* ShortcutStore.swift */,
 			);
@@ -87,10 +100,12 @@
 		B6196548EE9F3CAD56393AF2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9B3EB838756C8DF5572AB04F /* AddEditScheduleView.swift */,
 				45F99E1F1BB4D97ABA57C870 /* AddEditShortcutView.swift */,
 				1335295F70656A9A287D272E /* ConflictStatusView.swift */,
 				6D8EE58680D1D8CDBFC23A80 /* MenuBarContentView.swift */,
 				E3458BE6031881A2194E973B /* PermissionViews.swift */,
+				4C79DEE78BFE2D314BF832BB /* ScheduledTaskRowView.swift */,
 				953DDCD7177F2E057C117375 /* ShortcutListView.swift */,
 				FCC75D71BBC8484B81FBC0FC /* ShortcutRecorderView.swift */,
 				64DD428D2C9F1FA5381BAD2D /* ShortcutRowView.swift */,
@@ -230,6 +245,7 @@
 				25E09A0626DA1A3252358522 /* AboutPresenter.swift in Sources */,
 				21202B13E455422085FBA960 /* AccessibilityManager.swift in Sources */,
 				C3C811D5BDC25BB029CFCEAF /* ActionExecutor.swift in Sources */,
+				F8626AA9D2248CD5E455C597 /* AddEditScheduleView.swift in Sources */,
 				EC3C7B81BB55E1560BA1356D /* AddEditShortcutView.swift in Sources */,
 				408A7F69004D3A8DDC7987E3 /* AppModel.swift in Sources */,
 				ECADE6DB00857C6EC0D384F0 /* ConflictStatusView.swift in Sources */,
@@ -239,6 +255,10 @@
 				876BCF50BD31F1640426A0F7 /* MenuBarContentView.swift in Sources */,
 				1C091BEEC48BA849287B0E89 /* OneStepApp.swift in Sources */,
 				8CFC3088E37C14F862860F48 /* PermissionViews.swift in Sources */,
+				6AC18ACD0A317839CBDAFB09 /* ScheduleManager.swift in Sources */,
+				9110AD0B17676641E1CB4170 /* ScheduledTask.swift in Sources */,
+				67486EA5AB4DD01FE555746D /* ScheduledTaskRowView.swift in Sources */,
+				8A3CF8AB75B84D6E92080637 /* ScheduledTaskStore.swift in Sources */,
 				9D9769867F814FFE5F2CC913 /* ShortcutAction.swift in Sources */,
 				D0273B6060C5E38B53FFE4C1 /* ShortcutBinding.swift in Sources */,
 				250B9DB1F0C077A9342ED582 /* ShortcutConflict.swift in Sources */,
@@ -404,14 +424,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Support/OneStepAction.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Support/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.onestep.app;
 				PRODUCT_NAME = "OneStep Action";
 				SDKROOT = macosx;
@@ -425,14 +445,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Support/OneStepAction.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Support/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.onestep.app;
 				PRODUCT_NAME = "OneStep Action";
 				SDKROOT = macosx;
